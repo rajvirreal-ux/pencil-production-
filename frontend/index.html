@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pencil Production Line — HMI</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- ── FAULT BANNER ────────────────────────────────────────────────── -->
+  <div id="fault-banner" class="fault-banner hidden">
+    <span class="fault-icon">⚠</span>
+    <span id="fault-text">MACHINE FAULTED</span>
+    <span class="fault-hint">— press RESET to clear</span>
+  </div>
+
+  <div class="hmi-root">
+    <!-- ── HEADER ──────────────────────────────────────────────────── -->
+    <header class="hmi-header">
+      <div class="brand">
+        <span class="brand-icon">✏</span>
+        <span>Pencil Production Line</span>
+      </div>
+      <div class="machine-state-badge" id="state-badge">STOPPED</div>
+    </header>
+
+    <!-- ── CONTROLS ────────────────────────────────────────────────── -->
+    <section class="controls">
+      <button id="btn-start"  class="btn btn-start"  onclick="apiPost('/api/start')">START</button>
+      <button id="btn-stop"   class="btn btn-stop"   onclick="apiPost('/api/stop')">STOP</button>
+      <button id="btn-pause"  class="btn btn-pause"  onclick="apiPost('/api/pause')">PAUSE</button>
+      <button id="btn-reset"  class="btn btn-reset"  onclick="apiPost('/api/reset')">RESET</button>
+    </section>
+
+    <!-- ── COUNTERS ────────────────────────────────────────────────── -->
+    <section class="counters">
+      <div class="counter-card">
+        <div class="counter-label">Good Parts</div>
+        <div class="counter-value green" id="cnt-good">0</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-label">Defective</div>
+        <div class="counter-value red" id="cnt-defective">0</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-label">Yield</div>
+        <div class="counter-value yellow" id="cnt-yield">—</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-label">Cycles</div>
+        <div class="counter-value" id="cnt-cycles">0</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-label">Maint. Cycles</div>
+        <div class="counter-value" id="cnt-maint">0</div>
+      </div>
+    </section>
+
+    <!-- ── MAINTENANCE ALERT ────────────────────────────────────────── -->
+    <div id="maint-banner" class="maint-banner hidden">
+      MAINTENANCE DUE — schedule service before next run
+    </div>
+
+    <!-- ── CONVEYOR ────────────────────────────────────────────────── -->
+    <section class="conveyor-section">
+      <div class="conveyor-label">CONVEYOR</div>
+      <div class="conveyor" id="conveyor">
+        <!-- Stations rendered by JS -->
+      </div>
+      <div class="conveyor-arrow-row">
+        <span class="flow-label">FEED →</span>
+        <span class="flow-label">→ EXIT</span>
+      </div>
+    </section>
+
+    <!-- ── BOTTOM PANELS ──────────────────────────────────────────── -->
+    <div class="bottom-panels">
+      <!-- Defect log -->
+      <section class="panel defect-log-panel">
+        <div class="panel-title">REJECT FEED</div>
+        <ul id="defect-log" class="defect-log">
+          <li class="defect-empty">No rejects yet.</li>
+        </ul>
+      </section>
+
+      <!-- Pareto -->
+      <section class="panel pareto-panel">
+        <div class="panel-title">DEFECT PARETO</div>
+        <div id="pareto" class="pareto-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────────── -->
+  <footer class="hmi-footer">
+    <span>SRH Advanced Programming Project</span>
+    <span id="sync-dot" class="sync-dot sync-ok" title="Cloud sync status">● Cloud sync: <span id="sync-text">connecting…</span></span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

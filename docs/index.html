@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pencil Production Line — SRH Project</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>✏ Pencil Production Line</h1>
+      <p class="subtitle">Manufacturing Simulation with Cloud Monitoring — SRH Advanced Programming</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>What is it?</h2>
+      <p>
+        A real-time manufacturing simulation of a 4-station wooden pencil assembly line. The app runs
+        locally in Python, while all production metrics are streamed live to
+        <strong>InfluxDB Cloud</strong> and visualised on <strong>Grafana Cloud</strong> — no local
+        database or dashboard installation needed.
+      </p>
+    </section>
+
+    <section>
+      <h2>The Production Line</h2>
+      <p>
+        Each pencil travels through four sequential stations — Core Insertion, Body Bonding,
+        Ferrule Crimping, and Eraser Insertion. Every station monitors a key physical parameter
+        (insertion force, cure temperature, crimp pressure, insertion depth) and raises a specific,
+        human-readable defect reason if a measurement falls out of tolerance. A pencil that fails
+        any station is immediately routed to the reject bin with a full diagnosis.
+      </p>
+      <div class="station-grid">
+        <div class="station-card"><strong>S1</strong> Core Insertion<br/><small>Force (N)</small></div>
+        <div class="arrow">→</div>
+        <div class="station-card"><strong>S2</strong> Body Bonding<br/><small>Cure Temp (°C)</small></div>
+        <div class="arrow">→</div>
+        <div class="station-card"><strong>S3</strong> Ferrule Crimping<br/><small>Pressure (bar)</small></div>
+        <div class="arrow">→</div>
+        <div class="station-card"><strong>S4</strong> Eraser Insertion<br/><small>Depth (mm)</small></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Tech Stack</h2>
+      <p>
+        The HMI is built with <strong>FastAPI + WebSockets</strong> for real-time push updates, a
+        plain HTML/CSS/JS operator screen with Start / Stop / Reset controls and a live fault banner,
+        and the <strong>influxdb-client</strong> library for batched cloud writes. The Grafana
+        dashboard (temperature, machine state, good vs. defective parts, defect Pareto) is
+        provisioned programmatically via the Grafana HTTP API — reproducible from a single script.
+      </p>
+    </section>
+
+    <section>
+      <h2>Key Features</h2>
+      <ul>
+        <li>Explainable defects — every reject carries a station name, reason code, and measured value</li>
+        <li>Overheat fault at Body Bonding → machine FAULTED, HMI shows red alarm, Reset required</li>
+        <li>CMMS module tracks cycles since maintenance and raises maintenance-due alerts</li>
+        <li>Cloud resilience — write failures are logged and surfaced in the HMI footer; the simulation never crashes on network errors</li>
+        <li>Unit tests with no .env requirement — engine is fully decoupled from cloud dependencies</li>
+      </ul>
+    </section>
+
+    <section class="placeholder-section">
+      <div class="img-placeholder">[ HMI screenshot ]</div>
+      <div class="img-placeholder">[ Grafana dashboard screenshot ]</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>SRH Fernhochschule · Advanced Programming · 2024</p>
+      <p><a href="https://github.com/rajvir/pencil-production-line">GitHub Repository</a></p>
+    </div>
+  </footer>
+</body>
+</html>
